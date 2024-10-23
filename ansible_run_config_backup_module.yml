@@ -1,0 +1,53 @@
+
+
+- name: Router backup with backup_module
+
+  hosts: routers
+
+  gather_facts: no
+
+  tasks:
+ 
+     - name: Router backup for ios devices
+
+       ios_config:
+
+          backup: yes
+       
+       register: ios_backup
+       
+       when: ansible_network_os == 'ios'
+
+     - name: Saving the running_config
+
+       copy:
+
+          content: "{{ ios_backup }}"
+
+          dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"
+
+       when: ansible_network_os == 'ios'
+
+     - name: Router backup for nxos devices
+
+       nxos_config:
+
+          backup: yes
+
+       register: nxos_backup
+
+       when: ansible_network_os == 'nxos'
+       
+     - name: Saving the output
+
+       copy:
+
+          content: "{{ nxos_backup }}"
+
+          dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"
+
+       when: ansible_network_os == 'nxos'
+   
+       
+
+     
