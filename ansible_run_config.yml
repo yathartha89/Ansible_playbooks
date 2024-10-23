@@ -1,0 +1,61 @@
+---
+
+
+
+
+- name: My first backup
+
+  hosts: router1
+ 
+  gather_facts: no
+ 
+  tasks:
+
+     - name: Backup for IOS router
+
+       ios_command:
+
+          commands:
+
+             - show run
+
+       register: ios_backup
+
+     - name: Saving the backup
+
+       copy:
+
+          content: "{{ ios_backup.stdout[0] }}"
+
+          dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"
+
+- name: My second backup
+
+  hosts: router2
+
+  gather_facts: no
+  
+  tasks:
+
+     - name: Backup for NXOS router
+
+       nxos_command:
+
+          commands:
+  
+             - show run
+
+       register: nxos_backup
+
+     - name: Saving the backup
+
+       copy:
+
+         content: "{{ nxos_backup.stdout[0] }}"
+
+         dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"
+
+
+...
+
+          

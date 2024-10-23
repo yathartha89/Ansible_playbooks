@@ -1,0 +1,31 @@
+---
+
+- name: My first python script
+  hosts: router1
+  gather_facts: no
+  tasks:
+     - name: Physical interface configuration
+       ios_config:
+          lines:
+             - description Interface configured by YV using ansible
+             - ip address 3.3.3.3 255.0.0.0
+             - no shutdown
+          parents: interface GigabitEthernet2
+       register: loopback_output   
+
+     - name: Loopback interface configuration
+       ios_config:
+          lines:
+             - description Interface configured by YV using ansible
+             - ip address 4.4.4.4 255.255.255.255
+             - no shutdown
+          parents: interface loopback4
+       register: interface_output   
+     - name: Log interface output
+       debug:
+          var: interface_output
+
+     - name: log loopback_output
+       debug:
+          var: loopback_output 
+...
