@@ -1,0 +1,30 @@
+
+{% if ansible_network_os == 'ios' %}
+
+==========IOS-FACTS==========
+
+Hostname: {{ ios_facts.ansible_facts.ansible_net_hostname }}
+
+Version: {{ ios_facts.ansible_facts.ansible_net_version }}
+
+Model: {{ ios_facts.ansible_facts.ansible_net_model }}
+
+Serial_num: {{ ios_facts.ansible_facts.ansible_net_serialnum }}
+
+
+{% elif ansible_network_os == 'nxos' %}
+
+==========NXOS-FACTS==========
+
+Hostname: {{ nxos_facts.ansible_facts.ansible_net_hostname }}
+
+Version: {{ nxos_facts.ansible_facts.ansible_net_version }}
+
+Model: {{ nxos_facts.ansible_facts.ansible_net_model }}
+
+Serial_num: {{ nxos_facts.ansible_facts.ansible_net_serialnum }}
+
+
+{% endif %}
+
+
