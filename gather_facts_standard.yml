@@ -1,0 +1,44 @@
+---
+
+- name: To gather version and model for ios devices
+
+  gather_facts: no
+
+  hosts: router1
+
+  tasks:
+
+     - name: To gather version and model for ios device
+
+       ios_command:
+
+          commands:
+
+             - show version
+
+             - show inv
+
+       register: ios_facts
+
+     - name: To gather version and model
+
+       set_fact:
+
+          ios_facts_extracted:
+
+             Version: "{{ ios_facts.stdout[0] | regex_search('(?<=Version )\\S+') }}"
+
+             Model: "{{ ios_facts.stdout[1] | regex_search('(?<=PID: )\\S+') }}"
+
+     - name: Save tp file
+
+       copy:
+
+          content: |
+
+             Version: {{ ios_facts_extracted.Version }}
+
+             Model: {{ ios_facts_extracted.Model }}
+
+
+          dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"   

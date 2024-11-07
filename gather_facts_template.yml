@@ -1,0 +1,44 @@
+
+---
+
+
+- name: To gather facts using template for ios and nxos devices
+
+  gather_facts: no
+
+  hosts: routers
+
+  tasks:
+
+     - name: To gather facts for ios device
+
+       ios_facts:
+
+          gather_subset: all
+
+       register: ios_facts
+     
+       when: ansible_network_os == 'ios'
+       
+
+
+     - name: To gather facts for nxos device
+
+       nxos_facts:
+  
+          gather_subset: all
+
+       register: nxos_facts
+
+       when: ansible_network_os == 'nxos'
+
+     - name: To render the details from the template
+
+       template:
+
+          src: Template/facts.j2
+
+          dest: "{{ inventory_hostname }}_{{ lookup('pipe', 'date +%Y-%m-%d') }}.txt"
+
+
+         
