@@ -1,0 +1,29 @@
+---
+
+
+- name: Configure loopbacks with range
+
+  gather_facts: no
+
+  hosts: router1
+
+  tasks:
+
+     - name: Configure multiple loopbacks
+
+       ios_config:
+
+          lines:
+
+             - "no interface loopback{{ item }}"
+
+       loop: "{{ range(1,11) | list }}"
+
+       register: loopback_config
+
+
+     - name: Display the output
+
+       debug:
+
+          var: "{{ loopback_config }}"
